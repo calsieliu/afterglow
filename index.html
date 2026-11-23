@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFTERGLOW Art Fair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalnia:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&family=Jost:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+/* VOICE: warm, intimate, artful. An evening invitation, not a museum catalogue.
+   IDEA: a walk through the fair itself: brick gate, arched hall, glowing cubes, perfume, envelopes, floor plan, salon wall, scent card.
+   PICTURE: the brick wall you open, then an arched sand wall with a round lit window and a glowing marbled pillar.
+   COLOUR and TYPE: brick red, warm sand, amber glow, coral accent that follows the guest's chosen feeling. Kalnia thin display, Cormorant italic, Jost body.
+   LAYOUT: full-width warm bands, one object per section, centred compositions, stacking cleanly under 600px. */
+:root{color-scheme:light dark;
+--bg:light-dark(#f3e7d8,#1f1410);--bg2:light-dark(#ead8c3,#2a1b15);--card:light-dark(#fbf4ea,#33221a);
+--ink:light-dark(#3a2219,#f4e6d6);--mute:light-dark(#7a5a4a,#c9ab95);--line:light-dark(#d8c0a8,#4a3226);
+--brick:#a4432c;--brick2:#7e3220;--amber:#f2a65a;--glow:#ffd29a;--accent:#ff7a59;--room:#2a1610}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+@property --w1{syntax:'<color>';inherits:true;initial-value:#ffe6bf}
+@property --w2{syntax:'<color>';inherits:true;initial-value:#f6a865}
+@property --w3{syntax:'<color>';inherits:true;initial-value:#c9603c}
+@property --w4{syntax:'<color>';inherits:true;initial-value:#7e3220}
+@property --pa{syntax:'<color>';inherits:true;initial-value:#fbe2c2}
+@property --pb{syntax:'<color>';inherits:true;initial-value:#c45a32}
+@property --pc{syntax:'<color>';inherits:true;initial-value:#f3c99c}
+@property --halo{syntax:'<color>';inherits:true;initial-value:rgba(255,170,100,.5)}
+:root[data-mood=connected]{--accent:#e3606a}:root[data-mood=inspired]{--accent:#e9a23b}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Jost,system-ui,sans-serif;overflow-x:clip}
+body.locked{overflow:hidden}
+h1,h2,h3{font-family:Kalnia,Georgia,serif;font-weight:200;line-height:1.05;text-wrap:balance;margin:0}
+h2{font-size:clamp(34px,5vw,52px);letter-spacing:.02em}
+.it{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:21px;line-height:1.4}
+p{margin:0 0 .8em;max-width:66ch}
+a{color:inherit;text-underline-offset:3px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.band{padding:clamp(56px,8vw,112px) max(5vw,16px)}
+.wrap{max-width:1180px;margin:0 auto}
+.kicker{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:19px;color:var(--mute);margin:0 0 10px}
+.head{text-align:center;margin-bottom:clamp(32px,5vw,56px)}
+.head p{margin:14px auto 0}
+.btn{min-height:44px;padding:10px 20px;border-radius:999px;border:1px solid currentColor;background:none}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#2a120a}
+
+/* header */
+header{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;gap:16px;padding:10px max(3vw,14px);background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.me{flex:none;font-weight:500;letter-spacing:.08em;font-size:14px;white-space:nowrap}
+.logo{font-family:Kalnia,serif;font-weight:300;letter-spacing:.14em;font-size:15px;color:light-dark(var(--brick),#f2a07a)}
+header nav{display:flex;gap:4px;overflow-x:auto;margin-left:auto;scrollbar-width:none}
+header nav a{flex:none;text-decoration:none;font-size:14px;padding:10px 10px;border-radius:999px}
+header nav a:hover{background:var(--bg2)}
+.sound{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:none;display:grid;place-items:center}
+.sound svg{width:20px;height:20px}
+.sound.invite{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 30%,transparent);animation:ring 1.6s ease-out infinite}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(242,166,90,.75)}100%{box-shadow:0 0 0 16px rgba(242,166,90,0)}}
+.sound-l{flex:none;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;color:light-dark(var(--brick),#f2a07a);display:none}
+.sound-l.on{display:inline}
+.sound[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#2a120a}
+@media(max-width:760px){.logo{display:none}}
+
+/* gate */
+#gate{position:fixed;inset:0;z-index:50;background:#3b1a10;overflow:hidden}
+#gate .half{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;transition:transform 1.2s cubic-bezier(.7,0,.2,1)}
+#gate .l{left:0}#gate .r{right:0}
+#gate.open .l{transform:translateX(-102%)}#gate.open .r{transform:translateX(102%)}
+.row{display:flex;gap:6px;height:42px;margin-bottom:6px;white-space:nowrap}
+.bk{flex:none;width:120px;height:42px;border-radius:2px;background:repeating-linear-gradient(0deg,rgba(50,15,5,.22) 0 2px,transparent 2px 7px),var(--c);box-shadow:inset 0 2px 0 rgba(255,210,170,.18),inset 0 -3px 4px rgba(0,0,0,.25)}
+#seam{position:absolute;top:0;bottom:0;left:50%;width:0;background:radial-gradient(ellipse at center,#fff1d6,#ffb36b 40%,transparent 70%);transform:translateX(-50%);transition:width .6s ease;z-index:1}
+#gate.leak #seam{width:60px;filter:blur(6px)}
+#gate.open{background:transparent;pointer-events:none;transition:background .4s 1s}
+#brick{position:absolute;z-index:3;width:120px;height:42px;border:0;border-radius:2px;background:repeating-linear-gradient(0deg,rgba(120,50,10,.18) 0 2px,transparent 2px 7px),linear-gradient(#ffd9a0,#f08a4b);box-shadow:0 0 24px 6px rgba(255,170,90,.55);animation:pulse 2.2s ease-in-out infinite;transition:transform .35s ease,box-shadow .35s}
+#brick.push{transform:scale(.86);box-shadow:0 0 90px 40px rgba(255,190,110,.9);animation:none}
+@keyframes pulse{50%{box-shadow:0 0 44px 14px rgba(255,170,90,.8)}}
+.hint{position:absolute;z-index:3;left:0;right:0;bottom:clamp(28px,8vh,72px);text-align:center;color:#ffe4c4;padding:0 16px}
+.hint .t{font-family:Kalnia,serif;font-weight:200;font-size:clamp(40px,8vw,84px);letter-spacing:.08em;display:block;line-height:1;text-shadow:0 2px 30px rgba(0,0,0,.5)}
+.hint .s{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:21px;background:rgba(40,15,8,.55);padding:4px 14px;border-radius:999px;display:inline-block;margin-top:14px}
+.gname{position:absolute;z-index:3;left:0;right:0;top:clamp(36px,9vh,100px);text-align:center;padding:0 16px;font-family:Kalnia,Georgia,serif;font-weight:300;font-size:clamp(26px,7vw,96px);letter-spacing:.1em;line-height:1;color:#ffe4c4;text-shadow:0 2px 30px rgba(0,0,0,.55);pointer-events:none}
+#gate.open .hint,#gate.open .gname{opacity:0;transition:opacity .3s}
+
+/* hero */
+#top{padding-top:110px;background:linear-gradient(var(--bg),var(--bg2))}
+.hall{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,2fr) minmax(0,.8fr);gap:clamp(16px,3vw,40px);align-items:end;max-width:1180px;margin:0 auto}
+.win{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 42% 40%,var(--w1) 0,var(--w2) 38%,var(--w3) 70%,var(--w4) 100%);box-shadow:inset 0 0 0 14px var(--bg2),inset 0 10px 40px rgba(0,0,0,.35),0 30px 70px -26px var(--halo);margin-bottom:22%;transition:--w1 1.2s,--w2 1.2s,--w3 1.2s,--w4 1.2s,--halo 1.2s}
+.arch{border-radius:999px 999px 18px 18px;background:radial-gradient(ellipse at 50% 20%,color-mix(in srgb,var(--glow) 55%,var(--card)),var(--card) 70%);border:1px solid var(--line);padding:clamp(90px,14vw,150px) clamp(18px,4vw,48px) clamp(30px,4vw,48px);text-align:center;box-shadow:0 40px 80px -40px rgba(126,50,32,.45)}
+.arch h1:focus{outline:none}.arch h1{font-size:clamp(34px,5.4vw,78px);letter-spacing:.04em}
+.arch .it{margin:14px auto 6px}
+.meta{font-size:14px;letter-spacing:.06em;color:var(--mute)}
+.pillar{width:min(100%,210px);justify-self:center;height:min(74vh,600px);border-radius:999px;background:radial-gradient(ellipse 60% 18% at 40% 22%,color-mix(in srgb,var(--pb) 60%,transparent),transparent),radial-gradient(ellipse 50% 14% at 65% 48%,color-mix(in srgb,var(--pb) 55%,transparent),transparent),radial-gradient(ellipse 55% 16% at 35% 74%,color-mix(in srgb,var(--pb) 55%,transparent),transparent),linear-gradient(var(--pa),var(--pc));background-size:100% 140%;box-shadow:0 0 70px 10px var(--halo);animation:drift 14s ease-in-out infinite alternate;transition:--pa 1.2s,--pb 1.2s,--pc 1.2s,--halo 1.2s}
+@keyframes drift{to{background-position:0 100%}}
+.feel{margin-top:26px}
+.feel .q{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:20px;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{min-height:44px;padding:8px 18px;border-radius:999px;border:1px solid var(--line);background:var(--bg)}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#2a120a}
+@media(max-width:700px){.hall{grid-template-columns:1fr 1fr}.arch{grid-column:1/-1;order:-1}.win{margin:0;width:70%;justify-self:center}.pillar{height:200px;width:60%;justify-self:center}}
+
+:root,:root[data-mood=curious]{--w1:#ffe6bf;--w2:#f6a865;--w3:#c9603c;--w4:#7e3220;--pa:#fbe2c2;--pb:#c45a32;--pc:#f3c99c;--halo:rgba(255,170,100,.5)}
+:root[data-mood=connected]{--w1:#ffe1dc;--w2:#f0908a;--w3:#c4505e;--w4:#6e2232;--pa:#fde2df;--pb:#cf5a6c;--pc:#f1bcbc;--halo:rgba(255,130,150,.5)}
+:root[data-mood=inspired]{--w1:#fff3cc;--w2:#f5c45a;--w3:#c98a2a;--w4:#7a4a14;--pa:#fff1cf;--pb:#d0962e;--pc:#f5d899;--halo:rgba(255,205,100,.55)}
+.arch h1{color:light-dark(var(--brick),#f2a07a)}
+.cue{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:clamp(20px,2vw,24px);line-height:1.35;color:light-dark(#8e3a26,#ffd9b0);margin:-40px auto 4px;max-width:30ch;cursor:pointer;text-wrap:balance}
+.cue-hint{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:16px;letter-spacing:.04em;color:var(--mute);margin:0 auto 20px;cursor:pointer;animation:hintPulse 1.8s ease-in-out infinite}
+.cue-hint.off{visibility:hidden;animation:none}
+@keyframes hintPulse{50%{opacity:.4}}
+.cue:hover{text-shadow:0 0 14px rgba(255,190,120,.6)}
+
+.fnote{position:fixed;left:0;top:0;z-index:25;pointer-events:none;font-size:28px;line-height:1;color:light-dark(#e2703a,var(--glow));text-shadow:0 0 10px rgba(255,180,100,.8)}
+.fnote.fword{font-family:"Pinyon Script",cursive;font-size:22px;white-space:nowrap;color:light-dark(#a4432c,#ffd9b0)}
+/* invitation */
+.label{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:clamp(24px,4vw,56px);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:clamp(24px,4vw,48px);box-shadow:0 18px 40px -24px rgba(80,30,15,.35)}
+.label dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:15px}
+.label dt{color:var(--mute)}.label dd{margin:0}
+.label h3{font-size:30px;margin-bottom:6px}
+@media(max-width:700px){.label{grid-template-columns:1fr}}
+
+/* values: warm dark room with a spotlight */
+#values{background:radial-gradient(circle 280px at var(--mx,50%) var(--my,40%),rgba(255,190,120,.22),transparent 70%),var(--room);color:#f6e6d4}
+#values .kicker{color:#d7b49a}
+.cubes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,5vw,80px);max-width:900px;margin:0 auto}
+.hang{display:flex;flex-direction:column;align-items:center}
+.wire{width:1px;height:70px;background:linear-gradient(transparent,#a07a62)}
+.scene{width:min(300px,78vw);aspect-ratio:1;perspective:1100px;touch-action:pan-y;cursor:grab}
+.cube{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
+.face{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:28px;text-align:center;backface-visibility:hidden;background:radial-gradient(circle at 50% 40%,#ffb27a,#e9734e 55%,#b94a32);color:#2c110a;box-shadow:inset 0 0 40px rgba(255,230,190,.45),0 0 50px rgba(255,140,80,.35);font-size:15px;line-height:1.5}
+.face h3{font-size:clamp(22px,2.6vw,30px);letter-spacing:.02em;overflow-wrap:anywhere;margin-bottom:10px}
+.face .it{font-size:19px}
+.cube-nav{display:flex;gap:10px;margin-top:20px;align-items:center;font-size:14px;color:#d7b49a}
+.cube-nav button{width:44px;height:44px;border-radius:50%;border:1px solid #7d5a47;background:none;color:#f6e6d4}
+@media(max-width:700px){.cubes{grid-template-columns:1fr}}
+
+/* emotions */
+.bottles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,40px);max-width:1000px;margin:0 auto}
+.bottle{cursor:pointer;border-radius:10px;padding:8px 4px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.flask{position:relative;width:110px;height:170px;margin-bottom:18px}
+.flask .cap{position:absolute;left:36px;top:0;width:38px;height:34px;border-radius:6px 6px 2px 2px;background:linear-gradient(90deg,#6b3a28,#a0644a,#6b3a28)}
+.flask .neck{position:absolute;left:46px;top:32px;width:18px;height:14px;background:#d9b99e}
+.flask .body{position:absolute;left:0;right:0;bottom:0;height:126px;border-radius:22px;background:linear-gradient(115deg,rgba(255,255,255,.55),transparent 35%),linear-gradient(var(--tint),color-mix(in srgb,var(--tint) 60%,#5a2416));box-shadow:0 20px 30px -18px rgba(90,30,15,.5),inset 0 0 0 1px rgba(255,255,255,.35);transition:transform .3s}
+.bottle:hover .flask .body,.bottle[aria-pressed=true] .flask .body{transform:translateY(-4px)}
+.bottle[aria-pressed=true] .flask .body{box-shadow:0 0 0 3px var(--accent),0 0 40px rgba(255,160,90,.55)}
+.mist{position:absolute;left:55px;top:0;width:6px;height:6px;border-radius:50%;background:var(--glow);opacity:0;pointer-events:none}
+.spray .mist{animation:puff 1.4s ease-out forwards}
+@keyframes puff{0%{opacity:.9;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(5)}}
+.note{font-size:13px;letter-spacing:.1em;color:var(--mute)}
+.bottle h3{font-size:32px;margin:4px 0 8px}
+.bottle p{font-size:15px;margin:0 auto 6px}
+.bottle .ing{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:var(--brick)}
+@media(max-width:700px){.bottles{grid-template-columns:1fr}}
+
+/* guests */
+#guests{background:var(--bg2)}
+.env-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.env{position:relative;background:var(--card);border:1px solid var(--line);border-radius:6px;min-height:330px;padding:22px;overflow:hidden;box-shadow:0 16px 30px -20px rgba(80,30,15,.4)}
+.flap{position:absolute;inset:0 0 auto;height:56%;background:linear-gradient(160deg,var(--bg),var(--bg2));clip-path:polygon(0 0,100% 0,100% 40%,50% 100%,0 40%);transform-origin:top;transition:transform .6s ease;z-index:2;border-bottom:1px solid var(--line)}
+.seal{position:absolute;z-index:3;left:50%;top:56%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 35%,color-mix(in srgb,var(--wax) 70%,#fff),var(--wax) 60%,color-mix(in srgb,var(--wax) 70%,#000));box-shadow:0 4px 10px rgba(0,0,0,.3);color:#fff3e4;font-family:Kalnia,serif;font-size:22px;transition:opacity .4s,transform .4s}
+.env.open .flap{transform:rotateX(180deg);opacity:0}
+.env.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.6);pointer-events:none}
+.env .inside{opacity:0;transform:translateY(16px);transition:.5s .25s}
+.env.open .inside{opacity:1;transform:none}
+.env h3{font-size:24px;margin:0 0 8px}
+.env ul{padding-left:18px;margin:8px 0 10px;font-size:15px}
+.env .why{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:18px;color:var(--brick);margin:0}
+.env .tier{font-size:13px;letter-spacing:.1em;color:var(--mute)}
+.closed-l{position:absolute;z-index:3;left:0;right:0;bottom:22px;text-align:center;font-size:15px}
+.env.open .closed-l{display:none}
+@media(max-width:980px){.env-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.env-grid{grid-template-columns:1fr}}
+
+/* journey */
+.plan{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:center}
+.fig{position:relative;min-height:300px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.stage-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.stage-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:24px}
+.stage-card .time{font-family:Kalnia,serif;font-size:40px;font-weight:300;color:var(--brick);line-height:1}
+.stage-card h3{font-size:30px;margin:8px 0}
+@media(max-width:800px){.plan{grid-template-columns:1fr}}
+
+/* process curtain */
+#process{background:var(--room);color:#f6e6d4;padding-bottom:0}
+#process .kicker{color:#d7b49a}
+.curtain{position:relative;height:clamp(300px,44vw,580px);margin:0 calc(-1*max(5vw,16px));cursor:crosshair;touch-action:pan-y}
+.curtain canvas{position:absolute;inset:0;width:100%;height:100%}
+
+/* salon */
+.salon{columns:3 260px;column-gap:20px}
+.frame{break-inside:avoid;margin:0 0 20px;background:var(--card);border:1px solid var(--line);padding:12px;border-radius:4px;position:relative;box-shadow:0 14px 28px -20px rgba(80,30,15,.45)}
+.frame button.zoom{display:block;width:100%;border:0;padding:0;background:none;cursor:zoom-in}
+.frame img{display:block;width:100%;height:auto;border-radius:2px}
+.frame figcaption{font-size:14px;padding:10px 2px 2px;color:var(--mute)}
+.frame figcaption b{display:block;color:var(--ink);font-weight:500}
+.frame .rm{position:absolute;top:18px;right:18px;display:none;min-height:36px;padding:4px 12px;border-radius:999px;border:0;background:#2a120a;color:#fff}
+body.editing .frame .rm{display:block}
+dialog{border:0;padding:0;background:transparent;max-width:min(92vw,1200px)}
+dialog::backdrop{background:rgba(25,10,5,.85)}
+dialog img{max-width:100%;max-height:84vh;display:block;border-radius:4px}
+dialog .x{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:#2a120a}
+
+/* behind */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:clamp(24px,4vw,56px)}
+.rundown{list-style:none;margin:0;padding:0}
+.rundown li{display:grid;grid-template-columns:76px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.rundown .t{font-family:Kalnia,serif;font-size:24px;font-weight:300;color:var(--brick);white-space:nowrap}
+.rundown b{font-weight:500;display:block}
+.rundown span{font-size:15px;color:var(--mute)}
+.gantt{font-size:14px}
+.g-row{display:grid;grid-template-columns:minmax(150px,1.7fr) repeat(9,minmax(0,1fr));align-items:center;border-bottom:1px solid var(--line);min-height:40px}
+.g-row.h{font-size:12px;color:var(--mute);border-bottom:1px solid var(--ink)}
+.g-row.h span{text-align:center}
+.bar{height:16px;border-radius:999px;background:linear-gradient(90deg,var(--brick),var(--amber))}
+.star{justify-self:center;width:18px;height:18px;transform:rotate(45deg);background:var(--accent);border-radius:3px;box-shadow:0 0 16px var(--accent)}
+.moments{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:10px}
+.moments li{display:grid;grid-template-columns:130px 1fr;gap:14px;font-size:15px}
+.moments b{font-weight:500;color:var(--brick)}
+@media(max-width:860px){.cols{grid-template-columns:1fr}}
+@media(max-width:520px){.g-row{grid-template-columns:96px repeat(9,minmax(0,1fr));font-size:12px}.moments li{grid-template-columns:1fr;gap:0}}
+
+/* closing */
+#closing{background:linear-gradient(var(--bg),color-mix(in srgb,var(--amber) 30%,var(--bg)))}
+.scent{max-width:420px;margin:0 auto;aspect-ratio:3/4;border-radius:10px;padding:34px 30px;display:flex;flex-direction:column;justify-content:space-between;text-align:center;background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--accent) 45%,#ffe9cf),#f6dcc0 75%);color:#3a1a10;box-shadow:0 40px 70px -30px rgba(126,50,32,.55),inset 0 0 0 1px rgba(255,255,255,.6)}
+.scent .brand{font-family:Kalnia,serif;letter-spacing:.2em;font-size:15px}
+.scent h3{font-size:clamp(40px,8vw,56px);letter-spacing:.04em}
+.scent .it{font-size:20px}
+.scent .small{font-size:13px;letter-spacing:.08em}
+.close-cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
+
+footer{padding:32px max(5vw,16px);text-align:center;font-size:14px;color:var(--mute);border-top:1px solid var(--line)}
+
+/* editing */
+[data-k][hidden]{display:none!important}
+body.editing [data-k]{outline:1px dashed color-mix(in srgb,var(--accent) 70%,transparent);outline-offset:3px;border-radius:2px;cursor:text}
+body.editing [data-k]:focus{outline:2px solid var(--accent);background:color-mix(in srgb,var(--glow) 25%,transparent)}
+body.editing .cube{transition:none}
+.added p{position:relative}
+.add-btn{display:none;margin-top:12px;min-height:40px;padding:6px 16px;border-radius:999px;border:1px dashed var(--accent);background:none;color:inherit}
+body.editing .add-btn{display:inline-block}
+#tools{position:fixed;left:14px;bottom:14px;z-index:40;display:none;gap:6px;align-items:center;flex-wrap:wrap;background:#2a120a;color:#fff;padding:6px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:calc(100vw - 28px)}
+#tools.on{display:flex}
+#tools button{min-height:40px;padding:6px 14px;border-radius:999px;border:0;background:transparent;color:#fff}
+#tools button[aria-pressed=true]{background:var(--accent);color:#2a120a}
+#tools .tip{font-size:12px;opacity:.75;padding:0 10px;display:none}
+body.editing #tools .tip{display:inline}
+#mini{position:fixed;z-index:45;display:none;gap:4px;background:#2a120a;padding:4px;border-radius:999px}
+#mini.on{display:flex}
+#mini button{min-height:34px;padding:4px 12px;border-radius:999px;border:0;background:#fff;color:#2a120a;font-size:13px}
+#panel{position:fixed;left:14px;bottom:72px;z-index:41;width:min(380px,calc(100vw - 28px));max-height:60vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:16px;display:none;box-shadow:0 20px 40px rgba(0,0,0,.25)}
+#panel.on{display:block}
+#panel li{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+#panel ul{list-style:none;padding:0;margin:8px 0 0}
+#toast{position:fixed;right:14px;bottom:14px;z-index:60;background:#2a120a;color:#fff;padding:10px 16px;border-radius:999px;font-size:14px;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none}
+#toast.on{opacity:1;transform:none}
+.upload{display:none;margin:0 0 24px;padding:18px;border:1px dashed var(--accent);border-radius:8px;gap:10px;flex-wrap:wrap;align-items:end}
+body.editing .upload{display:flex}
+.upload label{display:flex;flex-direction:column;font-size:13px;gap:4px;flex:1 1 180px}
+.upload input{font:inherit;font-size:16px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);min-height:44px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body class="locked">
+
+<div id="gate" aria-label="Entrance">
+  <div class="half l"></div><div class="half r"></div><div id="seam"></div>
+  <button id="brick" type="button" aria-label="Press the glowing brick to enter AFTERGLOW"></button>
+  <div class="gname" aria-hidden="true">TZU-HSUAN LIU</div>
+  <div class="hint"><span class="t">AFTERGLOW</span><span class="s">Tap the glowing brick to enter</span></div>
+</div>
+
+<header>
+  <span class="me">TZU-HSUAN LIU</span>
+  <span class="logo">AFTERGLOW</span>
+  <nav aria-label="Sections">
+    <a href="#invitation">Invitation</a><a href="#values">Values</a><a href="#emotions">Emotions</a><a href="#guests">Guests</a><a href="#journey">Journey</a><a href="#salon">Inspiration</a><a href="#behind">Behind the scenes</a><a href="#closing">Your scent</a>
+  </nav>
+  <span class="sound-l" id="soundL">Play music</span>
+  <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Play music: Mozart, Piano Sonata K. 332"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3a9 9 0 0 1 9 9"/></svg></button>
+</header>
+
+<main>
+<section id="top" class="band" data-sec="top">
+  <div class="hall">
+    <div class="win" aria-hidden="true"></div>
+    <div class="arch">
+      <p class="cue" id="cue" data-k="hero-cue" title="Play the music">Begin with the music, and may the evening stay with you.</p>
+      <p class="cue-hint" id="cueHint">(click me)</p>
+      <h1 data-k="hero-title">AFTERGLOW</h1>
+      <p class="it" data-k="hero-tag">An art fair you feel before you see.</p>
+      <p class="meta" data-k="hero-meta">Paris Art Week · October 2027 · By invitation only</p>
+      <div class="feel">
+        <p class="q" data-k="hero-q">How do you want to feel tonight?</p>
+        <div class="chips" role="group" aria-label="Choose a feeling">
+          <button class="chip" data-mood="curious" aria-pressed="false">Curious</button>
+          <button class="chip" data-mood="connected" aria-pressed="false">Connected</button>
+          <button class="chip" data-mood="inspired" aria-pressed="false">Inspired</button>
+        </div>
+      </div>
+    </div>
+    <div class="pillar" aria-hidden="true"></div>
+  </div>
+  <div class="wrap added" data-sec="top"></div>
+</section>
+
+<section id="invitation" class="band" data-sec="invitation">
+  <div class="wrap">
+    <div class="head"><p class="kicker">The invitation</p><h2 data-k="inv-h">An evening, not an exhibition</h2></div>
+    <div class="label">
+      <div>
+        <h3 data-k="inv-name">AFTERGLOW, 2027</h3>
+        <p class="it" data-k="inv-medium">Live painting, classical music, scent, champagne</p>
+        <dl>
+          <dt>When</dt><dd data-k="inv-when">One evening during Paris Art Week, October 2027. Exact night to be confirmed</dd>
+          <dt>Where</dt><dd data-k="inv-where">Venue to be confirmed, Paris</dd>
+          <dt>Hours</dt><dd data-k="inv-hours">19:00 to 22:30</dd>
+          <dt>Entry</dt><dd data-k="inv-entry">By invitation only</dd>
+        </dl>
+      </div>
+      <div>
+        <p data-k="inv-p1">AFTERGLOW is an invitation-only art fair where art is felt before it is seen. Guests move through four moments: Arrive, Discover, Gather and Linger.</p>
+        <p data-k="inv-p2">Music, scent and live painting change as the evening goes on, so guests never quite know what comes next. They leave with a perfume that keeps the evening with them.</p>
+        <div class="added" data-sec="invitation"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="values" class="band" data-sec="values">
+  <div class="wrap">
+    <div class="head"><p class="kicker" data-k="val-k">Two values, different experiences</p><h2 data-k="val-h">What we design for</h2><p data-k="val-sub">Drag a cube, or use the arrows, to turn it.</p></div>
+    <div class="cubes">
+      <div class="hang"><div class="wire"></div>
+        <div class="scene" data-cube="0"><div class="cube">
+          <div class="face"><h3 data-k="w-1">WONDER</h3><p class="it" data-k="w-1s">Keep them guessing.</p></div>
+          <div class="face"><p data-k="w-2">Creating curiosity and mystery, making guests wonder what's happening and what they will discover next.</p></div>
+          <div class="face"><p data-k="w-3">Unexpected artistic performances, changing music, scents and visual experiences keep guests curious throughout the event.</p></div>
+          <div class="face"><p class="it" data-k="w-4">It sparks: Curiosity</p></div>
+        </div></div>
+        <div class="cube-nav"><button type="button" data-turn="0,-1" aria-label="Turn Wonder cube left">‹</button><span>Wonder</span><button type="button" data-turn="0,1" aria-label="Turn Wonder cube right">›</button></div>
+      </div>
+      <div class="hang"><div class="wire" style="height:110px"></div>
+        <div class="scene" data-cube="1"><div class="cube">
+          <div class="face"><h3 data-k="a-1">AUTHENTICITY</h3><p class="it" data-k="a-1s">Show the hand behind the work.</p></div>
+          <div class="face"><p data-k="a-2">Celebrating genuine artistic expression.</p></div>
+          <div class="face"><p data-k="a-3">Guests experience the artist's creative process first-hand: artists paint live and guests walk freely among them.</p></div>
+          <div class="face"><p class="it" data-k="a-4">It sparks: Connection</p></div>
+        </div></div>
+        <div class="cube-nav"><button type="button" data-turn="1,-1" aria-label="Turn Authenticity cube left">‹</button><span>Authenticity</span><button type="button" data-turn="1,1" aria-label="Turn Authenticity cube right">›</button></div>
+      </div>
+    </div>
+    <div class="added" data-sec="values"></div>
+  </div>
+</section>
+
+<section id="emotions" class="band" data-sec="emotions">
+  <div class="wrap">
+    <div class="head"><p class="kicker">Three emotions, one perfume</p><h2 data-k="emo-h">The evening, in three notes</h2><p data-k="emo-sub">Like a fragrance, the night opens bright, warms in the middle and stays with you at the end. Tap a bottle.</p></div>
+    <div class="bottles">
+      <div class="bottle" role="button" tabindex="0" data-mood="curious" aria-pressed="false" style="--tint:#f7b27c">
+        <span class="flask"><span class="cap"></span><span class="neck"></span><span class="body"></span></span>
+        <span class="note" data-k="e1-n">TOP NOTE</span><h3 data-k="e1-h">Curiosity</h3>
+        <p data-k="e1-p">We want guests to feel intrigued and eager to discover what happens next.</p>
+        <span class="ing" data-k="e1-i">Bergamot, pink pepper</span>
+      </div>
+      <div class="bottle" role="button" tabindex="0" data-mood="connected" aria-pressed="false" style="--tint:#e47a6a">
+        <span class="flask"><span class="cap"></span><span class="neck"></span><span class="body"></span></span>
+        <span class="note" data-k="e2-n">HEART NOTE</span><h3 data-k="e2-h">Connection</h3>
+        <p data-k="e2-p">We want guests to feel connected to the artists, their work and the people around them.</p>
+        <span class="ing" data-k="e2-i">Fig, warm brick, rose</span>
+      </div>
+      <div class="bottle" role="button" tabindex="0" data-mood="inspired" aria-pressed="false" style="--tint:#c9873d">
+        <span class="flask"><span class="cap"></span><span class="neck"></span><span class="body"></span></span>
+        <span class="note" data-k="e3-n">BASE NOTE</span><h3 data-k="e3-h">Inspiration</h3>
+        <p data-k="e3-p">We want guests to feel creatively stimulated and leave with new ideas and perspectives.</p>
+        <span class="ing" data-k="e3-i">Amber, sandalwood</span>
+      </div>
+    </div>
+    <p class="meta" style="text-align:center;margin:28px auto 0" data-k="emo-note">Scent notes are a proposal for the custom perfume.</p>
+    <div class="added" data-sec="emotions"></div>
+  </div>
+</section>
+
+<section id="guests" class="band" data-sec="guests">
+  <div class="wrap">
+    <div class="head"><p class="kicker">The guest list</p><h2 data-k="g-h">Four envelopes, four kinds of guest</h2><p data-k="g-sub">Break a seal to see who is invited and why.</p></div>
+    <div class="env-grid" id="envs"></div>
+    <div class="added" data-sec="guests"></div>
+  </div>
+</section>
+
+<section id="journey" class="band" data-sec="journey">
+  <div class="wrap">
+    <div class="head"><p class="kicker">The experience</p><h2 data-k="j-h">Walk the evening</h2><p data-k="j-sub">Four rooms, one route. Choose a room to follow the light.</p></div>
+    <div class="plan">
+      <div class="fig" id="planFig"><svg id="planSvg" role="img" aria-label="Floor plan with four rooms: Arrive, Discover, Gather, Linger"></svg></div>
+      <div>
+        <div class="stage-tabs" role="group" aria-label="Rooms" id="tabs"></div>
+        <div class="stage-card" aria-live="polite"><div class="time" id="sTime"></div><h3 id="sName"></h3><p id="sText"></p></div>
+      </div>
+    </div>
+    <div class="added" data-sec="journey"></div>
+  </div>
+</section>
+
+<section id="process" class="band" data-sec="process">
+  <div class="wrap">
+    <div class="head"><p class="kicker">Discover · Authenticity</p><h2 data-k="p-h">Behind the threads</h2><p data-k="p-sub">Move across the curtain to part the threads and see the work taking shape.</p></div>
+  </div>
+  <div class="curtain" id="curtain"><canvas id="cv" role="img" aria-label="A thread curtain in front of an abstract pastel artwork in orange, red and blue by Tzu-Hsuan Liu"></canvas></div>
+  <p class="meta" style="text-align:center;margin:0 auto;padding:16px 0 28px;color:#d7b49a" data-k="p-credit">Artwork by TZU-HSUAN LIU</p>
+</section>
+
+<section id="salon" class="band" data-sec="salon">
+  <div class="wrap">
+    <div class="head"><p class="kicker">Salon wall</p><h2 data-k="s-h">What inspired the room</h2><p data-k="s-sub">Warm light, red brick, curved walls and objects you want to touch.</p></div>
+    <form class="upload" id="upForm">
+      <label>Image<input type="file" id="upFile" accept="image/*" required></label>
+      <label>Caption<input type="text" id="upCap" placeholder="What it shows"></label>
+      <label>Source link<input type="url" id="upSrc" placeholder="https://"></label>
+      <button class="btn solid" type="submit">Add to wall</button>
+    </form>
+    <div class="salon" id="wall">
+      <figure class="frame"><button class="zoom" type="button"><img src="img/ref-cubes.jpg" alt="Hanging glowing cubes with printed faces in a warm orange room" width="464" height="860"></button><figcaption><b data-k="f1-c">Glowing cubes</b><span data-k="f1-s"></span></figcaption></figure>
+      <figure class="frame"><button class="zoom" type="button"><img src="img/ref-brick.jpg" alt="Textured terracotta brick wall behind a white basin" width="964" height="728"></button><figcaption><b data-k="f2-c">Red brick, stacked</b><span data-k="f2-s"></span></figcaption></figure>
+      <figure class="frame"><button class="zoom" type="button"><img src="img/ref-aesop.jpg" alt="Aesop store front with curved sand walls, a round window and a glowing marbled column" width="776" height="688"></button><figcaption><b data-k="f3-c">Curves and warm glow</b><span data-k="f3-s">Arched walls, a round window and a lit pillar. Aesop store front.</span></figcaption></figure>
+      <figure class="frame"><button class="zoom" type="button"><img src="img/moodboard.jpg" alt="Mood board: shadow concert stage, thread curtain, red vitrine room, perfume tray, scent jars, canapés on spoons, desserts on concrete blocks" width="1400" height="801"></button><figcaption><b data-k="f4-c">First mood board</b><span data-k="f4-s">Scent, hands, vitrines and food as part of the experience.</span></figcaption></figure>
+    </div>
+    <div class="added" data-sec="salon"></div>
+  </div>
+</section>
+
+<section id="behind" class="band" data-sec="behind">
+  <div class="wrap">
+    <div class="head"><p class="kicker">Behind the scenes</p><h2 data-k="b-h">The curator's notebook</h2></div>
+    <div class="cols">
+      <div>
+        <h3 style="font-size:28px;margin-bottom:8px" data-k="b-r">Event night</h3>
+        <ol class="rundown" id="rundown"></ol>
+      </div>
+      <div>
+        <h3 style="font-size:28px;margin-bottom:12px" data-k="b-g">Planning timeline, 2027</h3>
+        <div class="gantt" id="gantt" role="table" aria-label="Planning timeline from March to November 2027"></div>
+        <ul class="moments" id="moments"></ul>
+      </div>
+    </div>
+    <div class="added" data-sec="behind"></div>
+  </div>
+</section>
+
+<section id="closing" class="band" data-sec="closing">
+  <div class="wrap">
+    <div class="head"><p class="kicker">Linger</p><h2 data-k="c-h">You came to see art. You leave carrying a feeling.</h2><p data-k="c-sub">Every guest takes home a perfume. This is yours.</p></div>
+    <div class="scent" id="card" aria-live="polite">
+      <div class="brand">AFTERGLOW</div>
+      <div><p class="small" id="cNote"></p><h3 id="cName"></h3><p class="it" id="cLine"></p><p class="small" id="cIng"></p></div>
+      <div class="small">Paris Art Week · October 2027</div>
+    </div>
+    <div class="close-cta">
+      <button class="chip" data-mood="curious" aria-pressed="false">Curious</button>
+      <button class="chip" data-mood="connected" aria-pressed="false">Connected</button>
+      <button class="chip" data-mood="inspired" aria-pressed="false">Inspired</button>
+      <button class="btn" type="button" id="copyCard">Copy card text</button>
+    </div>
+    <div class="added" data-sec="closing"></div>
+  </div>
+</section>
+</main>
+
+<footer><p data-k="foot" style="margin:0 auto">Student project by TZU-HSUAN LIU, Grenoble Ecole de Management. Not an official event.</p><p style="margin:8px auto 0;font-size:13px" data-k="foot-music">Music: W. A. Mozart, Piano Sonata No. 12 in F major, K. 332. Paavali Jumppanen, piano. Recorded live at the Isabella Stewart Gardner Museum, Boston, shared under a Creative Commons licence.</p><p style="margin:8px auto 0;font-size:13px" data-k="foot-img">Reference images: Aesop store front photo © Aesop. The first mood board includes the cover art of Sodagreen’s “控制狂” and other collected references; all rights belong to their respective owners. Used for non-commercial, educational purposes only.</p></footer>
+
+<audio id="bgm" src="audio/mozart-k332.mp3" loop preload="none"></audio>
+<dialog id="lb"><button class="x" type="button" aria-label="Close">✕</button><img alt=""></dialog>
+<div id="tools" role="toolbar" aria-label="Editing">
+  <button type="button" id="tEdit" aria-pressed="false">Edit page</button>
+  <button type="button" id="tHidden">Hidden (0)</button>
+  <span class="tip">Click text to edit · Links: [label](https://…)</span>
+</div>
+<div id="mini"><button type="button" id="mHide">Hide this</button></div>
+<div id="panel" aria-label="Hidden blocks"><b>Hidden blocks</b><ul id="hList"></ul></div>
+<div id="toast" role="status"></div>
+
+<script>
+{
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=s=>esc(s).replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g,(m,l,u)=>`<a href="${u}" target="_blank" rel="noopener">${l}</a>`).replace(/\n/g,'<br>');
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2200)};
+
+/* ---------- data ---------- */
+const MOODS={
+ curious:{note:'Top note',name:'Curiosity',line:'You arrived wanting to know what comes next.',ing:'Bergamot · pink pepper'},
+ connected:{note:'Heart note',name:'Connection',line:'You found the people behind the work.',ing:'Fig · warm brick · rose'},
+ inspired:{note:'Base note',name:'Inspiration',line:'You leave with an idea that wasn’t yours this morning.',ing:'Amber · sandalwood'}};
+const TIERS=[
+ {k:'t1',wax:'#8e2a1a',n:'Tier 1',h:'Major private collectors',l:['Billionaire collectors with private foundations','Established international collectors','Next-generation and tech/finance collectors'],why:'They buy the work.'},
+ {k:'t2',wax:'#c06a2c',n:'Tier 2',h:'Institutional buyers',l:['Museum acquisition committees and directors','Patron circles and friends of museums','Corporate collections'],why:'They give the work a permanent home.'},
+ {k:'t3',wax:'#b5505a',n:'Tier 3',h:'Influencers of purchases',l:['Art advisors and consultants','Private bankers and family office managers','Auction house specialists','Leading gallerists'],why:'They guide what collectors buy.'},
+ {k:'t4',wax:'#7a5a3a',n:'Tier 4',h:'Credibility and amplification',l:['Critics and specialist press','Artists'],why:'They give the evening its credibility and its reach.'}];
+const STAGES=[
+ {n:'Arrive',t:'19:00',x:.13,d:'Doors open to live classical music and the evening’s signature scent at the entrance.'},
+ {n:'Discover',t:'19:30',x:.38,d:'Artists paint live. Guests walk freely among them and watch the work take shape.'},
+ {n:'Gather',t:'21:00',x:.63,d:'Champagne meets desserts. The artists join the guests.'},
+ {n:'Linger',t:'22:15',x:.87,d:'A take-home perfume is handed out at the exit, so the evening stays with you.'}];
+const RUN=[['16:00','Set-up','Final check, scent diffused at the entrance, artists set up their canvases'],['19:00','Arrive','Doors open, live string quartet and signature scent at the entrance'],['19:30','Discover','Artists start painting live, guests walk freely between them'],['20:30','Wonder moment','A surprise performance changes the mood of the room'],['21:00','Gather','Champagne and dessert pairings, artists join the guests'],['22:15','Linger','Take-home perfume handed out at the exit'],['22:30','Close','Doors close']];
+const MONTHS=['Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'];
+const PHASES=[['Concept, venue & budget',0,1],['Artists & partners',1,3],['Scent & perfume',2,5],['Guests & invitations',3,6],['Website, teaser & press',4,7],['Production & rehearsal',6,7],['Event night',7,7,1],['Follow-up',8,8]];
+const MOMENTS=[['End of April','Finalized the budget'],['End of June','Artists and partners confirmed: perfume house, champagne, pastry chef'],['July','Save-the-date to Tier 1 and 2 guests, who plan their October early'],['End of August','Perfume samples approved, production starts'],['Early September','Formal invitations out, website live'],['Early October','RSVPs closed, full run-through at the venue'],['Event night','During Paris Art Week'],['Within a week','Thank-you notes, follow-up with interested buyers, press recap']];
+
+/* render generated sections (each text gets a data-k so it can be edited) */
+$('#envs').innerHTML=TIERS.map(t=>`<article class="env" style="--wax:${t.wax}"><div class="flap"></div><button class="seal" type="button" aria-label="Open ${t.n} envelope">${t.n.slice(-1)}</button><div class="closed-l">${t.n}</div><div class="inside"><p class="tier" data-k="${t.k}-n">${t.n.toUpperCase()}</p><h3 data-k="${t.k}-h">${t.h}</h3><ul>${t.l.map((x,i)=>`<li data-k="${t.k}-l${i}">${x}</li>`).join('')}</ul><p class="why" data-k="${t.k}-w">${t.why}</p></div></article>`).join('');
+$('#rundown').innerHTML=RUN.map((r,i)=>`<li><span class="t" data-k="r${i}-t">${r[0]}</span><div><b data-k="r${i}-n">${r[1]}</b><span data-k="r${i}-d">${r[2]}</span></div></li>`).join('');
+$('#gantt').innerHTML=`<div class="g-row h" role="row"><span role="columnheader"></span>${MONTHS.map(m=>`<span role="columnheader">${m}</span>`).join('')}</div>`+PHASES.map((p,i)=>`<div class="g-row" role="row"><span role="cell" data-k="gp${i}">${p[0]}</span>${p[3]?`<i class="star" style="grid-column:${p[1]+2}" role="cell" aria-label="October"></i>`:`<i class="bar" style="grid-column:${p[1]+2}/${p[2]+3}" role="cell" aria-label="${MONTHS[p[1]]} to ${MONTHS[p[2]]}"></i>`}</div>`).join('');
+$('#moments').innerHTML=MOMENTS.map((m,i)=>`<li><b data-k="m${i}-t">${m[0]}</b><span data-k="m${i}-d">${m[1]}</span></li>`).join('');
+$('#tabs').innerHTML=STAGES.map((s,i)=>`<button class="chip" type="button" data-st="${i}" aria-pressed="false">${s.n}</button>`).join('');
+
+/* ---------- gate ---------- */
+try{history.scrollRestoration='manual'}catch(e){}window.scrollTo(0,0);
+const gate=$('#gate'),brick=$('#brick');
+const tones=['#a4432c','#9a3d27','#b04a30','#8f3923','#a84a33','#963f2a'];
+const buildWall=()=>{const W=126,H=48,w=innerWidth/2,rows=Math.ceil(innerHeight/H)+1,cols=Math.ceil(w/W)+2;
+ const mk=off=>Array.from({length:rows},(_,r)=>`<div class="row" style="margin-left:${-((r%2)*63)-off}px">${Array.from({length:cols},()=>`<i class="bk" style="--c:${tones[Math.random()*tones.length|0]}"></i>`).join('')}</div>`).join('');
+ $('.half.l',gate).innerHTML=mk(0);$('.half.r',gate).innerHTML=mk(w%W);
+ const r=Math.floor(rows/2)-1,row=$$('.half.l .row',gate)[r];const bks=$$('.bk',row);let pick=bks[0];
+ for(const b of bks){const rc=b.getBoundingClientRect();if(rc.right<=w-6)pick=b}
+ bks.forEach(b=>b.style.visibility='');pick.style.visibility='hidden';const rc=pick.getBoundingClientRect();
+ brick.style.left=rc.left+'px';brick.style.top=rc.top+'px'};
+buildWall();addEventListener('resize',()=>{if(!gate.classList.contains('open'))buildWall()});
+const enter=()=>{if(gate.classList.contains('open'))return;
+ const done=()=>{gate.hidden=true;window.scrollTo({top:0,behavior:'instant'});$('#sound').classList.add('invite');$('#soundL').classList.add('on');startNotes();document.body.classList.remove('locked');$('#top h1').setAttribute('tabindex','-1');$('#top h1').focus({preventScroll:true})};
+ if(reduce){gate.classList.add('open');done();return}
+ brick.classList.add('push');setTimeout(()=>gate.classList.add('leak'),250);setTimeout(()=>gate.classList.add('open'),750);setTimeout(done,2000)};
+brick.addEventListener('click',enter);
+
+/* ---------- mood ---------- */
+let mood=null;try{mood=localStorage.getItem('ag-mood')}catch(e){}
+const setMood=m=>{mood=m;document.documentElement.dataset.mood=m;try{localStorage.setItem('ag-mood',m)}catch(e){}
+ $$('.chip[data-mood],.bottle').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mood===m));const c=MOODS[m];
+ $('#cNote').textContent=c.note.toUpperCase();$('#cName').textContent=c.name;$('#cLine').textContent=c.line;$('#cIng').textContent=c.ing};
+setMood(MOODS[mood]?mood:'curious');
+$$('.chip[data-mood]').forEach(b=>b.addEventListener('click',()=>setMood(b.dataset.mood)));
+$$('.bottle').forEach(b=>b.addEventListener('keydown',e=>{if(editing||(e.key!=='Enter'&&e.key!==' '))return;e.preventDefault();b.click()}));
+$$('.bottle').forEach(b=>b.addEventListener('click',e=>{if(editing&&e.target.closest('[data-k]'))return;setMood(b.dataset.mood);
+ if(reduce)return;const f=$('.flask',b);f.classList.remove('spray');$$('.mist',f).forEach(x=>x.remove());
+ for(let i=0;i<14;i++){const s=document.createElement('span');s.className='mist';s.style.setProperty('--dx',(Math.random()*80-40)+'px');s.style.setProperty('--dy',(-30-Math.random()*60)+'px');s.style.animationDelay=(i*30)+'ms';f.appendChild(s)}
+ void f.offsetWidth;f.classList.add('spray')}));
+$('#copyCard').addEventListener('click',async()=>{const c=MOODS[mood];try{await navigator.clipboard.writeText(`AFTERGLOW\n${c.note}: ${c.name}\n${c.line}\n${c.ing}`);toast('Card text copied')}catch(e){toast('Copy is not available here')}});
+
+/* ---------- values: spotlight + cubes ---------- */
+const vs=$('#values');vs.addEventListener('pointermove',e=>{const r=vs.getBoundingClientRect();vs.style.setProperty('--mx',(e.clientX-r.left)+'px');vs.style.setProperty('--my',(e.clientY-r.top)+'px')});
+const rot=[0,0];
+const placeFaces=()=>$$('.scene').forEach(sc=>{const d=sc.clientWidth/2;$$('.face',sc).forEach((f,i)=>f.style.transform=`rotateY(${i*90}deg) translateZ(${d}px)`)});
+const turn=(i,dir)=>{rot[i]+=dir*90;$$('.cube')[i].style.transform=`translateZ(-${$$('.scene')[i].clientWidth/2}px) rotateY(${-rot[i]}deg)`};
+const ro=new ResizeObserver(()=>{placeFaces();turn(0,0);turn(1,0)});$$('.scene').forEach(s=>ro.observe(s));
+$$('[data-turn]').forEach(b=>b.addEventListener('click',()=>{const[i,d]=b.dataset.turn.split(',').map(Number);turn(i,d)}));
+$$('.scene').forEach((sc,i)=>{let x0=null;sc.addEventListener('pointerdown',e=>{if(editing)return;x0=e.clientX});
+ sc.addEventListener('pointerup',e=>{if(x0===null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>30)turn(i,dx<0?1:-1)})});
+let idle=setInterval(()=>{if(!reduce&&!editing&&!document.hidden){turn(0,1);setTimeout(()=>turn(1,1),1600)}},6500);
+
+/* ---------- guests ---------- */
+$$('.env').forEach(env=>$('.seal',env).addEventListener('click',()=>env.classList.add('open')));
+
+/* ---------- journey plan ---------- */
+let st=0;const svg=$('#planSvg');
+const drawPlan=()=>{const W=svg.clientWidth,H=svg.clientHeight,y=H*.5,rw=W*.21,rh=H*.5;
+ const ink=getComputedStyle(document.body).color;
+ svg.innerHTML=`<rect x="4" y="${H*.18}" width="${W-8}" height="${H*.64}" rx="14" fill="none" stroke="${ink}" stroke-opacity=".35"/>`+
+ `<path d="M ${W*.02} ${y} H ${W*.98}" stroke="#f2a65a" stroke-width="2" stroke-dasharray="4 8"/>`+
+ STAGES.map((s,i)=>`<g data-st="${i}" style="cursor:pointer"><rect x="${W*s.x-rw/2}" y="${y-rh/2}" width="${rw}" height="${rh}" rx="10" fill="${i===st?'rgba(242,166,90,.28)':'rgba(164,67,44,.08)'}" stroke="${i===st?'#e9734e':ink}" stroke-opacity="${i===st?1:.3}"/><text x="${W*s.x}" y="${y-rh/2+24}" text-anchor="middle" font-family="Kalnia,serif" font-size="${W<480?13:16}" fill="${ink}">${s.n}</text></g>`).join('')+
+ `<circle cx="${W*STAGES[st].x}" cy="${y}" r="10" fill="#ffd29a" style="filter:drop-shadow(0 0 10px #ff9a52);transition:cx .8s"/>`+
+ `<text x="${W*.02}" y="${H*.18-8}" font-size="12" fill="${ink}" fill-opacity=".6">Entrance</text><text x="${W*.98}" y="${H*.18-8}" text-anchor="end" font-size="12" fill="${ink}" fill-opacity=".6">Exit</text>`};
+const setStage=i=>{st=i;const s=STAGES[i];$('#sTime').textContent=s.t;$('#sName').textContent=s.n;$('#sText').textContent=s.d;$$('#tabs .chip').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.st===i));drawPlan()};
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-st]');if(b)setStage(+b.dataset.st)});
+svg.addEventListener('click',e=>{const g=e.target.closest('[data-st]');if(g)setStage(+g.dataset.st)});
+const pro=new ResizeObserver(drawPlan);pro.observe($('#planFig'));setStage(0);
+
+/* ---------- thread curtain ---------- */
+const cv=$('#cv'),cx=cv.getContext('2d'),cur=$('#curtain');let paint=null,P={x:-999,y:-999},sm={x:-999,y:-999},raf=0;
+const art=new Image();art.src='img/artwork.jpg';
+const makePaint=(w,h)=>{const o=document.createElement('canvas');o.width=w;o.height=h;const g=o.getContext('2d');
+ const bg=g.createRadialGradient(w/2,h/2,0,w/2,h/2,Math.max(w,h)*.7);bg.addColorStop(0,'#4a1c10');bg.addColorStop(1,'#1e0d07');g.fillStyle=bg;g.fillRect(0,0,w,h);
+ if(art.complete&&art.naturalWidth){const k=Math.max(w/art.naturalWidth,h/art.naturalHeight),aw=art.naturalWidth*k,ah=art.naturalHeight*k;g.drawImage(art,(w-aw)/2,Math.min(0,Math.max(h-ah,(h-ah)*.3)),aw,ah)}
+ return o};
+art.onload=()=>{if(cur.clientWidth)sizeCurtain()};
+const drawCurtain=()=>{raf=0;const w=cv.width,h=cv.height,dpr=devicePixelRatio||1;sm.x+=(P.x-sm.x)*.18;sm.y+=(P.y-sm.y)*.18;
+ cx.drawImage(paint,0,0);cx.strokeStyle='rgba(240,222,200,.82)';cx.lineWidth=1.3*dpr;const R=Math.min(150,cur.clientWidth*.2)*dpr;
+ for(let x=0;x<w;x+=7*dpr){cx.beginPath();for(let y=0;y<h+16*dpr;y+=16*dpr){y=Math.min(y,h);const dx=x-sm.x,dy=y-sm.y,d=Math.hypot(dx,dy);let ox=0;if(d<R){ox=(dx>=0?1:-1)*(R-d)*.9}
+  y?cx.lineTo(x+ox,y):cx.moveTo(x+ox,y)}cx.stroke()}
+ if(Math.abs(P.x-sm.x)>.5||Math.abs(P.y-sm.y)>.5)raf=requestAnimationFrame(drawCurtain)};
+const sizeCurtain=()=>{const dpr=devicePixelRatio||1;cv.width=cur.clientWidth*dpr;cv.height=cur.clientHeight*dpr;paint=makePaint(cv.width,cv.height);drawCurtain()};
+const cro=new ResizeObserver(sizeCurtain);cro.observe(cur);
+cur.addEventListener('pointermove',e=>{const r=cur.getBoundingClientRect(),dpr=devicePixelRatio||1;P={x:(e.clientX-r.left)*dpr,y:(e.clientY-r.top)*dpr};if(sm.x<-900)sm={...P};if(reduce)sm={...P};if(!raf)raf=requestAnimationFrame(drawCurtain)});
+cur.addEventListener('pointerleave',()=>{P={x:sm.x,y:sm.y<cv.height/2?-500:cv.height+500};if(!raf)raf=requestAnimationFrame(drawCurtain)});
+
+/* ---------- lightbox ---------- */
+const lb=$('#lb');$('#wall').addEventListener('click',e=>{const z=e.target.closest('.zoom');if(!z||editing)return;$('img',lb).src=$('img',z).src;$('img',lb).alt=$('img',z).alt;lb.showModal()});
+$('.x',lb).addEventListener('click',()=>lb.close());lb.addEventListener('click',e=>{if(e.target===lb)lb.close()});
+
+/* ---------- notes floating from the cue line up to the music button ---------- */
+let noteT=0;
+let noteN=0;
+const spawnNote=()=>{const btn=$('#sound');if(!btn.classList.contains('invite')||document.hidden){if(!btn.classList.contains('invite'))clearInterval(noteT);return}
+ const t=btn.getBoundingClientRect(),cue=$('#cue'),c=cue.getBoundingClientRect(),onScreen=c.bottom>70&&c.top<innerHeight&&!cue.hidden;
+ const word=++noteN%5===0,n=document.createElement('span');n.className=word?'fnote fword':'fnote';n.textContent=word?'play the music':'\u266a\u266b\u266c\u2669'[Math.random()*4|0];document.body.appendChild(n);
+ const x0=onScreen?c.left+Math.random()*c.width:innerWidth*(.15+Math.random()*.6),y0=onScreen?c.top:innerHeight*(.6+Math.random()*.35);
+ const x1=t.left+t.width/2-(word?60:10),y1=t.top+t.height/2-12,amp=18+Math.random()*22,ph=Math.random()*6,steps=9,kf=[];
+ for(let i=0;i<=steps;i++){const f=i/steps,e=f*f*(3-2*f),x=x0+(x1-x0)*e+Math.sin(ph+f*Math.PI*4)*amp*(1-f),y=y0+(y1-y0)*f,r=Math.sin(ph+f*Math.PI*4)*16;
+  kf.push({transform:`translate(${x}px,${y}px) rotate(${r}deg) scale(${.7+.5*Math.sin(f*Math.PI)})`,opacity:f<.1?f*10:f>.9?(1-f)*10:1})}
+ n.animate(kf,{duration:3400+Math.random()*1200,easing:'linear'}).onfinish=()=>n.remove()};
+const startNotes=()=>{if(reduce)return;clearInterval(noteT);spawnNote();noteT=setInterval(spawnNote,550)};
+$('#cue').addEventListener('click',()=>{if(!editing)$('#sound').click()});
+$('#cueHint').addEventListener('click',()=>$('#sound').click());
+
+/* ---------- music: Mozart K. 332, Paavali Jumppanen (off until clicked) ---------- */
+const bgm=$('#bgm');let fade=0;
+const fadeTo=(v,then)=>{clearInterval(fade);fade=setInterval(()=>{const d=v-bgm.volume;if(Math.abs(d)<.02){bgm.volume=v;clearInterval(fade);then&&then();return}bgm.volume=Math.max(0,Math.min(1,bgm.volume+Math.sign(d)*.02))},60)};
+$('#sound').addEventListener('click',async()=>{const b=$('#sound');b.classList.remove('invite');$('#soundL').classList.remove('on');$('#cueHint').classList.add('off');
+ if(!bgm.paused){b.setAttribute('aria-pressed','false');fadeTo(0,()=>bgm.pause());return}
+ try{bgm.volume=0;await bgm.play();fadeTo(.6);b.setAttribute('aria-pressed','true')}catch(e){toast('Music could not start. Try again')}});
+
+/* ---------- editable content ---------- */
+let editing=false,canWrite=false,db=null,assets=null;
+const edits={},hidden=new Set(),added={},gallery={};
+$$('[data-k]').forEach(el=>el.dataset.def=el.textContent.trim());
+const paint1=el=>{const k=el.dataset.k,raw=k in edits?edits[k]:el.dataset.def;el.dataset.raw=raw;
+ if(document.activeElement===el)return;if(editing)el.textContent=raw;else el.innerHTML=fmt(raw);el.hidden=hidden.has(k)};
+const paintAll=()=>{$$('[data-k]').forEach(paint1);$('#tHidden').textContent=`Hidden (${hidden.size})`;renderHidden()};
+const keyLabel=k=>{const el=$(`[data-k="${CSS.escape(k)}"]`);return el?(el.dataset.raw||el.dataset.def).slice(0,48):k};
+const renderHidden=()=>{$('#hList').innerHTML=[...hidden].map(k=>`<li><span>${esc(keyLabel(k))}</span><button class="btn" type="button" data-restore="${esc(k)}">Restore</button></li>`).join('')||'<li>Nothing hidden.</li>'};
+const fail=e=>{if(e&&e.code==='invalid_argument'){canWrite=false;$('#tools').classList.remove('on');setEditing(false);toast('You can view this page but not save edits')}else toast('Could not save. Try again')};
+const save=async el=>{const k=el.dataset.k,t=el.innerText.replace(/\n{3,}/g,'\n\n').trim();el.dataset.raw=t;
+ if(t===(k in edits?edits[k]:el.dataset.def))return;
+ if(t===el.dataset.def){delete edits[k];await db.doc('edits/'+k).delete().catch(fail)}else{edits[k]=t;await db.doc('edits/'+k).set({t}).catch(fail)}toast('Saved')};
+
+/* added text blocks */
+const renderAdded=()=>$$('.added').forEach(box=>{const sec=box.dataset.sec;const items=Object.entries(added).filter(([,v])=>v.sec===sec).sort((a,b)=>a[1].at-b[1].at);
+ box.innerHTML=items.map(([id])=>`<p data-k="ad-${esc(id)}" data-added="${esc(id)}"></p>`).join('')+`<button class="add-btn" type="button" data-add="${esc(sec)}">+ Add text here</button>`;
+ $$('[data-added]',box).forEach(p=>{p.dataset.def=added[p.dataset.added].t;paint1(p);if(editing)p.contentEditable='plaintext-only'})});
+renderAdded();
+
+const setEditing=on=>{editing=on;document.body.classList.toggle('editing',on);$('#tEdit').setAttribute('aria-pressed',on);$('#tEdit').textContent=on?'Done':'Edit page';
+ $$('[data-k]').forEach(el=>{if(on)el.contentEditable='plaintext-only';else el.removeAttribute('contenteditable')});
+ if(!on){$('#mini').classList.remove('on');$('#panel').classList.remove('on')}paintAll()};
+$('#tEdit').addEventListener('click',()=>setEditing(!editing));
+$('#tHidden').addEventListener('click',()=>$('#panel').classList.toggle('on'));
+$('#hList').addEventListener('click',async e=>{const b=e.target.closest('[data-restore]');if(!b)return;const k=b.dataset.restore;hidden.delete(k);paintAll();await db.doc('hidden/'+k).delete().catch(fail);toast('Restored')});
+
+let focused=null;
+document.addEventListener('focusin',e=>{const el=e.target.closest&&e.target.closest('[data-k]');if(!editing||!el)return;focused=el;el.textContent=el.dataset.raw;
+ const r=el.getBoundingClientRect(),m=$('#mini');m.classList.add('on');m.style.left=Math.max(8,Math.min(innerWidth-130,r.left))+'px';m.style.top=Math.max(64,r.top-46)+'px';
+ $('#mHide').textContent=el.dataset.added?'Delete':'Hide this'});
+document.addEventListener('focusout',e=>{const el=e.target.closest&&e.target.closest('[data-k]');if(!editing||!el)return;setTimeout(()=>{if(document.activeElement!==el&&!$('#mini').contains(document.activeElement))$('#mini').classList.remove('on')},150);
+ if(el.dataset.added){const id=el.dataset.added,t=el.innerText.trim();if(added[id]&&t!==added[id].t){added[id].t=t;el.dataset.def=t;db.doc('added/'+id).update({t}).then(()=>toast('Saved')).catch(fail)}}else save(el)});
+$('#mHide').addEventListener('mousedown',e=>e.preventDefault());
+$('#mHide').addEventListener('click',async()=>{const el=focused;if(!el)return;$('#mini').classList.remove('on');el.blur();
+ if(el.dataset.added){const id=el.dataset.added;delete added[id];renderAdded();await db.doc('added/'+id).delete().catch(fail);toast('Deleted');return}
+ const k=el.dataset.k;hidden.add(k);paintAll();await db.doc('hidden/'+k).set({on:true}).catch(fail);toast('Hidden. Restore it from Hidden')});
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-add]');if(!b||!editing)return;const ref=db.collection('added').doc();const data={sec:b.dataset.add,t:'New text. Click to edit.',at:Date.now()};
+ added[ref.id]=data;renderAdded();try{await ref.set(data);const p=$(`[data-added="${ref.id}"]`);p&&p.focus()}catch(err){fail(err)}});
+document.addEventListener('keydown',e=>{if(editing&&e.key==='Escape'&&focused)focused.blur()});
+/* links stay clickable when not editing */
+document.addEventListener('click',e=>{if(editing&&e.target.closest('[data-k] a'))e.preventDefault()},true);
+
+/* gallery from uploads */
+const renderGallery=()=>{$$('.frame[data-g]').forEach(f=>f.remove());const wall=$('#wall');
+ Object.entries(gallery).sort((a,b)=>a[1].at-b[1].at).forEach(([id,g])=>{const f=document.createElement('figure');f.className='frame';f.dataset.g=id;
+  const src='/_blob/'+encodeURIComponent(g.asset);
+  f.innerHTML=`<button class="zoom" type="button"><img alt="" loading="lazy"></button><figcaption><b></b><span></span></figcaption><button class="rm" type="button">Remove</button>`;
+  $('img',f).src=src;$('img',f).alt=g.cap||'Inspiration image';$('b',f).textContent=g.cap||'';
+  if(typeof g.src==='string'&&g.src.startsWith('https://')){const a=document.createElement('a');a.href=g.src;a.target='_blank';a.rel='noopener';a.textContent='Source';$('span',f).appendChild(a)}
+  $('.rm',f).addEventListener('click',async()=>{delete gallery[id];renderGallery();await db.doc('gallery/'+id).delete().catch(fail);toast('Removed from wall')});
+  wall.appendChild(f)})};
+$('#upForm').addEventListener('submit',async e=>{e.preventDefault();const file=$('#upFile').files[0];if(!file)return;if(!assets){toast('Uploads are not available here');return}
+ const btn=$('#upForm button');btn.disabled=true;btn.textContent='Uploading…';
+ try{const a=await assets.upload(file);const ref=db.collection('gallery').doc();const g={asset:a.id,cap:$('#upCap').value.trim(),src:$('#upSrc').value.trim(),at:Date.now()};
+  gallery[ref.id]=g;renderGallery();await ref.set(g);e.target.reset();toast('Added to the wall')}catch(err){toast('Upload failed. Try a smaller image')}
+ btn.disabled=false;btn.textContent='Add to wall'});
+
+/* connect to storage */
+(async()=>{
+ if(!window.claude)return;const user=await claude.use('user');db=await claude.use('db');
+ if(!db)return;
+ const sub=(col,fn)=>db.collection(col).onSnapshot(s=>{fn(s.docs);clearTimeout(timer)},()=>{});
+ const timer=setTimeout(()=>{if(canWrite)toast('Saved edits can’t be reached yet')},10000);
+ sub('edits',docs=>{for(const k in edits)delete edits[k];docs.forEach(d=>{const v=d.data();if(v&&typeof v.t==='string')edits[d.id]=v.t});paintAll()});
+ sub('hidden',docs=>{hidden.clear();docs.forEach(d=>hidden.add(d.id));paintAll()});
+ sub('added',docs=>{for(const k in added)delete added[k];docs.forEach(d=>{const v=d.data();if(v&&typeof v.t==='string')added[d.id]={sec:String(v.sec),t:v.t,at:+v.at||0}});renderAdded()});
+ sub('gallery',docs=>{for(const k in gallery)delete gallery[k];docs.forEach(d=>{const v=d.data();if(v&&v.asset)gallery[d.id]={asset:String(v.asset),cap:String(v.cap||''),src:String(v.src||''),at:+v.at||0}});renderGallery()});
+ const ok=user?await user.canEdit():null;
+ if(ok){canWrite=true;$('#tools').classList.add('on');assets=await claude.use('assets')}
+})();
+}
+</script>
+</body>
+</html>
